@@ -1,4 +1,5 @@
 import React, { createContext, useState } from "react";
+import { jwtDecode } from "jwt-decode";
 
 export const AuthContext = createContext();
 
@@ -15,8 +16,18 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("token");
   };
 
+  let email = null;
+  if (token) {
+    try {
+      const decoded = jwtDecode(token);
+      email = decoded.email || decoded.sub || null;
+    } catch (e) {
+      email = null;
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{ token, login, logout }}>
+    <AuthContext.Provider value={{ token, login, logout, email }}>
       {children}
     </AuthContext.Provider>
   );
