@@ -102,9 +102,7 @@ function Dashboard() {
         >
           TRANSACTION DASHBOARD
         </Typography>
-        <Box display="flex" justifyContent="flex-end" mb={2}>
-          <Button href="/logout" variant="outlined" color="secondary">Logout</Button>
-        </Box>
+
         <Tabs value={tab} onChange={(_, v) => setTab(v)} centered>
           <Tab label="Transactions" />
           <Tab label="Fraud Alerts" />
