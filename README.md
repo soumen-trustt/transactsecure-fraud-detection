@@ -51,6 +51,7 @@ cd transactsecure-fraud-detection
 # In a separate terminal, start the React UI
 cd ui
 npm install
+npm install @mui/material @mui/icons-material @emotion/react @emotion/styled jspdf jspdf-autotable
 npm start
 ```
 
