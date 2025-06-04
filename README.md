@@ -1,4 +1,4 @@
-# TransactSecure Fraud Detection Platform
+# TransactionSecure Fraud Detection Platform
 
 🚀 A modern web application built with Spring Boot (Java) and React that provides real-time fraud detection for financial transactions. The platform features secure user authentication, transaction management, fraud alerting, and a responsive, interactive dashboard UI.
 
