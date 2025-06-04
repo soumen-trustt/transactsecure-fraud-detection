@@ -10,4 +10,5 @@ import java.util.UUID;
 @Repository
 public interface TransactionRepository extends CrudRepository<Transaction, Long> {
     List<Transaction> findByStatus(String status);
+    List<Transaction> findByUserId(Long userId);
 }

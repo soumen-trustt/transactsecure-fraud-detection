@@ -30,8 +30,16 @@ public class TransactionController {
     }
 
     @GetMapping
-    public List<Transaction> getAllTransactions() {
-        return (List<Transaction>) transactionRepository.findAll();
+    public List<Transaction> getUserTransactions(@RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.replace("Bearer ", "");
+        String email = authService.getEmailFromToken(token);
+        var userOpt = authService.getUserByEmail(email);
+        if (userOpt.isPresent()) {
+            Long userId = userOpt.get().getId();
+            return transactionRepository.findByUserId(userId);
+        } else {
+            throw new RuntimeException("User not found");
+        }
     }
 
     @PostMapping
