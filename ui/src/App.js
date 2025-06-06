@@ -5,6 +5,8 @@ import ProtectedRoute from "./ProtectedRoute";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Logout from "./pages/Logout";
+import ResetPassword from "./pages/ResetPassword";
+import ForgotPassword from "./pages/ForgotPassword";
 import TransactionsTable from "./TransactionsTable";
 import FraudAlertsTable from "./FraudAlertsTable";
 import TransactionForm from "./TransactionForm";
@@ -60,16 +62,7 @@ function Dashboard() {
   const [tab, setTab] = React.useState(0);
   const { mode, toggleColorMode } = useColorMode();
   return (
-    <Box
-      sx={{
-        minHeight: '100vh',
-        background: theme => theme.palette.mode === 'dark'
-          ? 'linear-gradient(135deg, #23263a 80%, #212738 100%)'
-          : 'linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 60%, #ff80ab 100%)',
-        py: 6,
-        transition: 'background 0.6s',
-      }}
-    >
+    <>
       <Container maxWidth="md" sx={{
         background: 'rgba(255,255,255,0.93)',
         borderRadius: 4,
@@ -121,27 +114,53 @@ function Dashboard() {
           100% { opacity: 1; transform: translateY(0); }
         }
       `}</style>
-    </Box>
+    </>
   );
 }
 
 function App() {
   return (
-    <ColorModeProvider>
-      <ToastProvider>
-        <AuthProvider>
-          <Router>
-            <Routes>
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/logout" element={<Logout />} />
-              <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-              <Route path="/" element={<Navigate to="/dashboard" replace />} />
-            </Routes>
-          </Router>
-        </AuthProvider>
-      </ToastProvider>
-    </ColorModeProvider>
+    <>
+      <Box
+        sx={{
+          minHeight: '100vh',
+          background: `linear-gradient(rgba(35,38,58,0.7), rgba(0,188,212,0.30)), url('/money-bg.jpg') center/cover no-repeat`,
+          position: 'fixed',
+          width: '100vw',
+          height: '100vh',
+          zIndex: -1,
+          top: 0,
+          left: 0,
+          '&:before': {
+            content: '""',
+            position: 'absolute',
+            zIndex: 0,
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            pointerEvents: 'none',
+          },
+        }}
+      />
+      <ColorModeProvider>
+        <ToastProvider>
+          <AuthProvider>
+            <Router>
+              <Routes>
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/logout" element={<Logout />} />
+                <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/" element={<Navigate to="/dashboard" replace />} />
+              </Routes>
+            </Router>
+          </AuthProvider>
+        </ToastProvider>
+      </ColorModeProvider>
+    </>
   );
 }
 

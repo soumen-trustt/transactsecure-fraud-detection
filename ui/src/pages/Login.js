@@ -1,5 +1,7 @@
 import React, { useState, useContext } from "react";
-import { TextField, Button, Box, Typography, Link } from "@mui/material";
+import { TextField, Button, Box, Typography, Link, IconButton, InputAdornment, Avatar } from "@mui/material";
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import axios from "../axiosConfig";
 import { AuthContext } from "../AuthContext";
 import { useToast } from "../ToastContext";
@@ -9,11 +11,20 @@ export default function Login() {
   const { login } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const { showToast } = useToast();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    if (!/^[^@]+@[^@]+\.[^@]+$/.test(email)) {
+      showToast("Enter a valid email address.", "error");
+      return;
+    }
+    if (!password) {
+      showToast("Password is required.", "error");
+      return;
+    }
     try {
       const res = await axios.post("/api/auth/login", { email, password });
       localStorage.setItem("token", res.data.token); // Store JWT
@@ -36,10 +47,8 @@ export default function Login() {
     <Box
       sx={{
         minHeight: '100vh',
-        background: theme => theme.palette.mode === 'dark'
-          ? 'linear-gradient(135deg, #23263a 80%, #212738 100%)'
-          : 'linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 60%, #ff80ab 100%)',
         py: 8,
+        position: 'relative',
       }}
     >
       <style>{`
@@ -57,12 +66,14 @@ export default function Login() {
         maxWidth: 420,
         mx: 'auto',
         mt: 8,
-        background: 'rgba(255,255,255,0.95)',
+        background: 'rgba(255,255,255,0.98)',
         borderRadius: 4,
-        boxShadow: '0 8px 40px 0 rgba(0,188,212,0.18)',
+        boxShadow: '0 8px 40px 0 rgba(0,188,212,0.20)',
         p: 4,
         animation: 'fadeInUp 1s',
+        position: 'relative',
       }}>
+        <Avatar sx={{ width: 64, height: 64, mx: 'auto', mb: 2, bgcolor: '#ff4081', boxShadow: '0 2px 12px #ff408188' }} src="/logo192.png" />
         <Typography variant="h5" gutterBottom sx={{
           fontWeight: 700,
           color: '#00bcd4',
@@ -93,7 +104,7 @@ export default function Login() {
           />
           <TextField
             label="Password"
-            type="password"
+            type={showPassword ? "text" : "password"}
             fullWidth
             margin="normal"
             value={password}
@@ -106,6 +117,19 @@ export default function Login() {
                 '&:hover fieldset': { borderColor: '#00bcd4' },
                 '&.Mui-focused fieldset': { borderColor: '#ff4081', boxShadow: '0 0 0 2px #ff408144' },
               },
+            }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={() => setShowPassword(s => !s)}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              )
             }}
           />
 
@@ -134,7 +158,10 @@ export default function Login() {
             Login
           </Button>
         </form>
-        <Box sx={{ mt: 2 }}>
+        <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <Link href="/forgot-password" underline="hover" sx={{ color: '#ff4081', fontWeight: 500, mb: 1 }}>
+            Forgot Password?
+          </Link>
           <Link href="/signup" underline="hover">Don't have an account? Sign Up</Link>
         </Box>
       </Box>
