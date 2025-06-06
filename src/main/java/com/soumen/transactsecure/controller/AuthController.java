@@ -37,4 +37,24 @@ public class AuthController {
     public ResponseEntity<?> logout() {
         return ResponseEntity.ok("Logged out (client should delete JWT token)");
     }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestBody AuthRequest request) {
+        boolean sent = authService.initiatePasswordReset(request.getEmail());
+        if (sent) {
+            return ResponseEntity.ok("Password reset email sent");
+        } else {
+            return ResponseEntity.badRequest().body("Email not found");
+        }
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestParam String token, @RequestParam String newPassword) {
+        boolean reset = authService.resetPassword(token, newPassword);
+        if (reset) {
+            return ResponseEntity.ok("Password reset successful");
+        } else {
+            return ResponseEntity.badRequest().body("Invalid or expired token");
+        }
+    }
 }

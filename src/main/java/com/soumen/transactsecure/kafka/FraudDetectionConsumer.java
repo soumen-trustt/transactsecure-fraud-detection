@@ -47,6 +47,10 @@ public class FraudDetectionConsumer {
             } else {
                 logger.info("FraudAlert for transaction {} already exists. Skipping duplicate.", transaction.getId());
             }
+        } else {
+            transaction.setStatus("APPROVED");
+            transactionRepository.save(transaction);
+            logger.info("Transaction {} is approved. Amount: {}", transaction.getId(), transaction.getAmount());
         }
     }
 }

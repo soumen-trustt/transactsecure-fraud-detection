@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS email_history (
+    id SERIAL PRIMARY KEY,
+    recipient VARCHAR(255) NOT NULL,
+    sender VARCHAR(255) NOT NULL,
+    subject VARCHAR(255),
+    body TEXT,
+    sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
