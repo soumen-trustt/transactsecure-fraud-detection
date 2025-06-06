@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { TextField, Button, Box, Typography, Link } from "@mui/material";
-import axios from "axios";
+import axios from "../axiosConfig";
 import { useToast } from "../ToastContext";
 import { useNavigate } from "react-router-dom";
 
