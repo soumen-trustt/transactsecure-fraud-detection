@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fraud Rule Management</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2rem; }
+        table { border-collapse: collapse; width: 100%; margin-top: 2rem; }
+        th, td { border: 1px solid #ccc; padding: 0.5rem; text-align: left; }
+        th { background: #f4f4f4; }
+        form { margin-bottom: 2rem; }
+        label { margin-right: 1rem; }
+    </style>
+</head>
+<body>
+<h2>Add New Fraud Rule</h2>
+<form id="ruleForm">
+    <label>Rule Name: <input name="name" required></label>
+    <label>Field:
+        <select name="field">
+            <option value="amount">Amount</option>
+            <option value="merchant">Merchant</option>
+            <option value="status">Status</option>
+            <option value="userId">User ID</option>
+            <!-- Add more fields as needed -->
+        </select>
+    </label>
+    <label>Operator:
+        <select name="operator">
+            <option value=">">&gt;</option>
+            <option value="<">&lt;</option>
+            <option value="=">=</option>
+            <option value="!=">!=</option>
+        </select>
+    </label>
+    <label>Value: <input name="value" required></label>
+    <label>Logic:
+        <select name="logic">
+            <option value="AND">AND</option>
+            <option value="OR">OR</option>
+        </select>
+    </label>
+    <label>Action:
+        <select name="action">
+            <option value="flag">Flag</option>
+            <option value="block">Block</option>
+        </select>
+    </label>
+    <button type="submit">Add Rule</button>
+</form>
+
+<h2>Existing Rules</h2>
+<table id="rulesTable">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Rule JSON</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script>
+async function fetchRules() {
+    const res = await fetch('/api/fraud-rules');
+    const rules = await res.json();
+    const tbody = document.querySelector('#rulesTable tbody');
+    tbody.innerHTML = '';
+    rules.forEach(rule => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${rule.name}</td><td><pre>${rule.ruleJson}</pre></td><td><button onclick="deleteRule(${rule.id})">Delete</button></td>`;
+        tbody.appendChild(tr);
+    });
+}
+
+async function deleteRule(id) {
+    await fetch(`/api/fraud-rules/${id}`, { method: 'DELETE' });
+    fetchRules();
+}
+
+document.getElementById('ruleForm').onsubmit = async function(e) {
+    e.preventDefault();
+    const form = e.target;
+    const data = {
+        name: form.name.value,
+        ruleJson: JSON.stringify({
+            conditions: [{
+                field: form.field.value,
+                operator: form.operator.value,
+                value: form.value.value
+            }],
+            logic: form.logic.value,
+            action: form.action.value
+        }),
+        status: 'ACTIVE',
+        action: form.action.value
+    };
+    await fetch('/api/fraud-rules', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    });
+    form.reset();
+    fetchRules();
+};
+
+window.onload = fetchRules;
+</script>
+</body>
+</html>

@@ -10,6 +10,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import TransactionsTable from "./TransactionsTable";
 import FraudAlertsTable from "./FraudAlertsTable";
 import TransactionForm from "./TransactionForm";
+import FraudRulesPage from "./pages/FraudRulesPage";
 import { Container, Typography, Tabs, Tab, Box, Button, Avatar, Menu, MenuItem, IconButton as MIconButton, Tooltip, ListItemIcon } from "@mui/material";
 import { ColorModeProvider, useColorMode } from './ColorModeContext';
 import { ToastProvider } from './ToastContext';
@@ -99,6 +100,7 @@ function Dashboard() {
         <Tabs value={tab} onChange={(_, v) => setTab(v)} centered>
           <Tab label="Transactions" />
           <Tab label="Fraud Alerts" />
+          <Tab label="Fraud Rules" />
         </Tabs>
         <Box mt={4} sx={{ transition: 'all 0.4s', minHeight: 400 }}>
           {tab === 0 && <>
@@ -106,6 +108,7 @@ function Dashboard() {
             <TransactionsTable />
           </>}
           {tab === 1 && <FraudAlertsTable />}
+          {tab === 2 && <FraudRulesPage />}
         </Box>
       </Container>
       <style>{`
@@ -154,6 +157,7 @@ function App() {
                 <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                 <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/fraud-rules" element={<ProtectedRoute><FraudRulesPage /></ProtectedRoute>} />
                 <Route path="/" element={<Navigate to="/dashboard" replace />} />
               </Routes>
             </Router>

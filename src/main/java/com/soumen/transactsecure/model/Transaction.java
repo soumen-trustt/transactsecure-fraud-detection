@@ -55,4 +55,28 @@ public class Transaction {
     public void setUserId(Long userId) { this.userId = userId; }
 
     // Optionally add toString(), equals(), hashCode()
+
+    /**
+     * Returns the value of a field by name for dynamic rule evaluation.
+     */
+    public Object getFieldValue(String fieldName) {
+        switch (fieldName) {
+            case "id": return getId();
+            case "userId": return getUserId();
+            case "amount": return getAmount();
+            case "merchant": return getMerchant();
+            case "status": return getStatus();
+            case "timestamp": return getTimestamp();
+            case "updatedOn": return getUpdatedOn();
+            case "hourOfDay":
+                if (getTimestamp() != null) {
+                    return getTimestamp().getHour();
+                } else {
+                    return null;
+                }
+            // Add more fields as needed
+            default: return null;
+        }
+    }
 }
+
